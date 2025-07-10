@@ -4,7 +4,7 @@ Results are generated using Monte Carlo methods to estimate win probabilities an
 
 ## Features
 
-- Supports 2 to 10 players
+- Supports 2 to 9 players
 - Random or manual input for hole cards and community cards (flop, turn)
 - Hand strength evaluation: detects hand types and best 5-card combinations
 - Monte Carlo simulation of thousands of poker hands per run
