@@ -292,9 +292,9 @@ public class PokerGUI extends JFrame {
     }
 
     // --- UTILITY METHODS ---
-
     private void loadCardImages() {
-        // ⚠️ IMPORTANT: Update this path to the correct location on your computer.
+
+        //USE YOUR CARD LOCATION FOLDER HERE
         String basePath = "/Users/janekczajnik/Desktop/projects/solver/media/Playing Cards/PNG-cards-1.3/";
         String[] suits = {"clubs", "diamonds", "hearts", "spades"};
         String[] values = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
@@ -309,6 +309,8 @@ public class PokerGUI extends JFrame {
         }
     }
 
+
+    //For loading card
     private ImageIcon loadImage(String path) {
         try {
             ImageIcon icon = new ImageIcon(path);

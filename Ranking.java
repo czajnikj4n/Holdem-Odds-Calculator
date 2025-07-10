@@ -5,59 +5,10 @@ import java.util.stream.Collectors;
 
 public class Ranking {
     public Deck deck;
-    public ArrayList<String> bestHandPlayer;
-    public ArrayList<String> bestHandVillain;
+
     public ArrayList<String> communityCards;
     public Set<String> usedCards;
-    private int points;
 
-    public static void main(String[] args) {
-        Ranking ranking = new Ranking(); // Create ranking instance
-        Scanner scanner = new Scanner(System.in);
-
-        // Get player and villain hands
-        System.out.println("What cards do you have?");
-        String cardsHero = scanner.nextLine();
-        System.out.println("What cards does your opponent have?");
-        String cardsVillain = scanner.nextLine();
-
-        // Deal hole cards
-        System.out.println("\nYour hand: " + ranking.handPlayer(cardsHero));
-        System.out.println("Opponent's hand: " + ranking.handVillain(cardsVillain));
-
-        // Generate and display community cards
-        ArrayList<String> communityCards = ranking.communityCards(ranking);
-        System.out.println("\nCommunity Cards: " + communityCards);
-
-        // Update best hands for both players
-        ranking.updateBestHand(ranking.bestHandPlayer, ranking.bestHandPlayer);
-        ranking.updateBestHand(ranking.bestHandVillain, ranking.bestHandVillain);
-
-        // Determine best hand combinations
-        HandResult playerResult = ranking.findBestFiveCardHand(ranking.bestHandPlayer);
-        HandResult villainResult = ranking.findBestFiveCardHand(ranking.bestHandVillain);
-
-        // Display best 5-card hands
-        System.out.println("\n✅ Player's Best Hand: " + playerResult.bestHand);
-        System.out.println("🏆 Player's Hand Type: " + playerResult.handName);
-        System.out.println("\n✅ Villain's Best Hand: " + villainResult.bestHand);
-        System.out.println("🏆 Villain's Hand Type: " + villainResult.handName);
-
-        // Compare scores
-        int playerScore = ranking.evaluateHand(playerResult.bestHand);
-        int villainScore = ranking.evaluateHand(villainResult.bestHand);
-        System.out.println("\n🔢 Player's Hand Score: " + playerScore);
-        System.out.println("🔢 Villain's Hand Score: " + villainScore);
-
-        // Determine winner
-        if (playerScore > villainScore) {
-            System.out.println("\n🎉 Player Wins with " + playerResult.handName + "!");
-        } else if (playerScore < villainScore) {
-            System.out.println("\n👑 Villain Wins with " + villainResult.handName + "!");
-        } else {
-            System.out.println("\n🤝 It's a Draw! Both players have " + playerResult.handName + ".");
-        }
-    }
 
 
     public Ranking() {
@@ -65,141 +16,9 @@ public class Ranking {
         this.deck.removeCards(); // ✅ Ensure any leftover cards are cleared (Extra safety)
         this.deck.initialize(); // ✅ Completely reinitialize the deck with all 52 cards
         this.deck.shuffle(); // ✅ Shuffle so the order is randomized
-        this.bestHandPlayer = new ArrayList<>();
-        this.bestHandVillain = new ArrayList<>();
+
         this.usedCards = new HashSet<>();
     }
-
-
-
-
-
-    public ArrayList<String> handPlayer(String cardsHero) {
-        ArrayList<String> cardsPlayer = new ArrayList<>();
-
-        if (cardsHero != null && !cardsHero.isEmpty()) {
-            // ✅ Split input into cards
-            String[] cardParts = cardsHero.split(", ");
-
-            if (cardParts.length == 1) { // ✅ One card provided → Use it & draw one more
-                String[] firstCard = cardParts[0].split(" ");
-                if (firstCard.length < 3) {
-                    System.out.println("Invalid card format.");
-                    return new ArrayList<>();
-                }
-
-                String value1 = firstCard[0];
-                String suit1 = firstCard[2].toLowerCase();
-
-                // ✅ Add specified card and draw one random card
-                String drawnCard1 = deck.drawPrecise(value1, suit1);
-                String drawnCard2 = deck.draw(); // Draw the second card randomly
-
-                if (drawnCard1 != null) cardsPlayer.add(drawnCard1);
-                if (drawnCard2 != null) cardsPlayer.add(drawnCard2);
-            } else if (cardParts.length == 2) { // ✅ Two cards provided → Use both
-                String[] firstCard = cardParts[0].split(" ");
-                String[] secondCard = cardParts[1].split(" ");
-
-                if (firstCard.length < 3 || secondCard.length < 3) {
-                    System.out.println("Invalid card format.");
-                    return new ArrayList<>();
-                }
-
-                String value1 = firstCard[0];
-                String suit1 = firstCard[2].toLowerCase();
-                String value2 = secondCard[0];
-                String suit2 = secondCard[2].toLowerCase();
-
-                // ✅ Add both specified cards
-                String drawnCard1 = deck.drawPrecise(value1, suit1);
-                String drawnCard2 = deck.drawPrecise(value2, suit2);
-
-                if (drawnCard1 != null) cardsPlayer.add(drawnCard1);
-                if (drawnCard2 != null) cardsPlayer.add(drawnCard2);
-            }
-        }
-
-        // ✅ If no cards were provided → Draw two random cards
-        while (cardsPlayer.size() < 2) {
-            String drawnCard = deck.draw(); // Ensure draw() actually removes from deck
-            if (drawnCard != null) {
-                cardsPlayer.add(drawnCard);
-            } else {
-                System.out.println("Error: Deck is empty or draw() returned null.");
-            }
-        }
-
-        bestHandPlayer.addAll(cardsPlayer);
-        return cardsPlayer;
-    }
-
-
-
-    public ArrayList<String> handVillain(String cardsVillain) {
-        ArrayList<String> cardsOp = new ArrayList<>();
-
-        if (cardsVillain != null && !cardsVillain.isEmpty()) {
-            // ✅ Split input into cards
-            String[] cardParts = cardsVillain.split(", ");
-
-            if (cardParts.length == 1) { // ✅ One card provided → Use it & draw one more
-                String[] firstCard = cardParts[0].split(" ");
-                if (firstCard.length < 3) {
-                    System.out.println("Invalid card format.");
-                    return new ArrayList<>();
-                }
-
-                String value1 = firstCard[0];
-                String suit1 = firstCard[2].toLowerCase();
-
-                // ✅ Add specified card and draw one random card
-                String drawnCard1 = deck.drawPrecise(value1, suit1);
-                String drawnCard2 = deck.draw(); // Draw the second card randomly
-
-                if (drawnCard1 != null) cardsOp.add(drawnCard1);
-                if (drawnCard2 != null) cardsOp.add(drawnCard2);
-            } else if (cardParts.length == 2) { // ✅ Two cards provided → Use both
-                String[] firstCard = cardParts[0].split(" ");
-                String[] secondCard = cardParts[1].split(" ");
-
-                if (firstCard.length < 3 || secondCard.length < 3) {
-                    System.out.println("Invalid card format.");
-                    return new ArrayList<>();
-                }
-
-                String value1 = firstCard[0];
-                String suit1 = firstCard[2].toLowerCase();
-                String value2 = secondCard[0];
-                String suit2 = secondCard[2].toLowerCase();
-
-                // ✅ Add both specified cards
-                String drawnCard1 = deck.drawPrecise(value1, suit1);
-                String drawnCard2 = deck.drawPrecise(value2, suit2);
-
-                if (drawnCard1 != null) cardsOp.add(drawnCard1);
-                if (drawnCard2 != null) cardsOp.add(drawnCard2);
-            }
-        }
-
-        // ✅ If no cards were provided → Draw two random cards
-        while (cardsOp.size() < 2) {
-            String drawnCard = deck.draw(); // Ensure draw() actually removes from deck
-            if (drawnCard != null) {
-                cardsOp.add(drawnCard);
-            } else {
-                System.out.println("Error: Deck is empty or draw() returned null.");
-            }
-        }
-
-        bestHandVillain.addAll(cardsOp);
-        return cardsOp;
-    }
-
-
-
-
-
 
     public void generateCommunityCards(String flopInput, String turnInput, ArrayList<String> usedCards) {
         this.communityCards = new ArrayList<>();
@@ -245,42 +64,6 @@ public class Ranking {
     }
 
 
-
-
-
-    public double getWinProbability(ArrayList<String> playerHand, ArrayList<String> villainHand, ArrayList<String> communityCards) {
-        int playerWins = 0;
-        int totalSimulations = 1000; // Run 1000 mini-simulations
-
-        for (int i = 0; i < totalSimulations; i++) {
-            ArrayList<String> simulatedCommunityCards = new ArrayList<>(communityCards);
-            for (String card : communityCards) {
-                simulatedCommunityCards.add(card.toLowerCase()); // ✅ Normalize suits
-            }
-            // Fill missing community cards
-            while (simulatedCommunityCards.size() < 5) {
-                String drawnCard;
-                do {
-                    drawnCard = deck.draw();
-                } while (simulatedCommunityCards.contains(drawnCard)); // Avoid duplicates
-                simulatedCommunityCards.add(drawnCard);
-            }
-
-            // Evaluate hands
-            HandResult playerResult = findBestFiveCardHand(playerHand);
-            HandResult villainResult = findBestFiveCardHand(villainHand);
-
-            int playerScore = evaluateHand(playerResult.bestHand);
-            int villainScore = evaluateHand(villainResult.bestHand);
-
-            if (playerScore > villainScore) {
-                playerWins++;
-            }
-        }
-
-        return (double) playerWins / totalSimulations; // Return win probability
-    }
-
     public ArrayList<String> flop() {
         ArrayList<String> flopCards = new ArrayList<>();
         flopCards.add(deck.draw());
@@ -301,25 +84,6 @@ public class Ranking {
         return riverCard;
     }
 
-    public ArrayList<String> communityCards(Ranking ranking) {
-        if (this.communityCards == null) {
-            this.communityCards = new ArrayList<>();
-        }
-
-        for (String card : ranking.flop()) {
-            if (!this.communityCards.contains(card)) this.communityCards.add(card);
-        }
-        for (String card : ranking.turn()) {
-            if (!this.communityCards.contains(card)) this.communityCards.add(card);
-        }
-        for (String card : ranking.river()) {
-            if (!this.communityCards.contains(card)) this.communityCards.add(card);
-        }
-
-        return this.communityCards; // ✅ Use class-level variable
-    }
-
-
     public void setCommunityCards(ArrayList<String> presetCards) {
         this.communityCards = new ArrayList<>(presetCards);
     }
@@ -328,24 +92,6 @@ public class Ranking {
     private String getSuit(String card) {
         return card.split(" ")[2].toLowerCase(); // ✅ Normalize suits to lowercase
     }
-
-
-
-    public void updateBestHand(ArrayList<String> holeCards, ArrayList<String> bestHand) {
-        List<String> allCards = new ArrayList<>(holeCards);
-        allCards.addAll(this.communityCards); // ✅ Ensure it uses the stored board
-
-        bestHand.clear();
-
-        if (allCards.size() > 5) {
-            HandResult result = findBestFiveCardHand(allCards);
-            bestHand.addAll(result.bestHand);
-        } else {
-            bestHand.addAll(allCards);
-        }
-    }
-
-
 
 
     private List<List<String>> generateCombinations(List<String> cards, int k) {
@@ -458,9 +204,6 @@ public class Ranking {
 
     public int evaluateHand(List<String> hand) {
         hand.sort(Comparator.comparingInt(this::cardValue).reversed());
-
-
-
         boolean isFlush = isFlush(hand);
         Map.Entry<Boolean, Integer> straightResult = isStraight(hand);
         boolean isStraight = straightResult.getKey();
@@ -535,24 +278,6 @@ public class Ranking {
         return pairs.get(1);
     }
 
-
-
-
-
-    private int getHighCardStrength(List<String> hand) {
-        List<Integer> values = getSortedCardValues(hand);
-        int score = 0, multiplier = 10000;
-
-        for (int i = 0; i < Math.min(values.size(), 5); i++) {
-            score += values.get(i) * multiplier;
-            multiplier /= 10; // Weighting factor ensures strongest high cards count more
-        }
-        return score;
-    }
-
-
-
-
     private int getHighestKicker(Map<Integer, Integer> rankCount, List<String> hand, int needed) {
         List<Integer> kickers = getSortedCardValues(hand);
         List<Integer> availableKickers = new ArrayList<>();
@@ -571,21 +296,6 @@ public class Ranking {
 
         return score;
     }
-
-
-
-
-    private int getHighCardScore(List<String> hand) {
-        List<Integer> values = getSortedCardValues(hand);
-        int score = 0, multiplier = 1;
-
-        for (int i = values.size() - 1; i >= 0; i--) {
-            score += values.get(i) * multiplier;
-            multiplier *= 10; // Weighting factor ensures strongest high cards count more
-        }
-        return score;
-    }
-
 
 
     private String determineHandName(List<String> hand) {
@@ -654,18 +364,12 @@ public class Ranking {
                     values.get(i + 1) + 1 == values.get(i + 2) &&
                     values.get(i + 2) + 1 == values.get(i + 3) &&
                     values.get(i + 3) + 1 == values.get(i + 4)) {
-                return Map.entry(true, values.get(i + 4));  // ✅ Highest card in straight
+                return Map.entry(true, values.get(i + 4));  //Highest card in straight
             }
         }
 
-        return Map.entry(false, 0);  // ❌ No straight
+        return Map.entry(false, 0);  //No straight
     }
-
-
-
-
-
-
     private Map<Integer, Integer> countRanks(List<String> hand) {
         Map<Integer, Integer> rankCount = new HashMap<>();
         for (String card : hand) {
