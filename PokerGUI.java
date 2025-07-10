@@ -295,7 +295,7 @@ public class PokerGUI extends JFrame {
 
     private void loadCardImages() {
         // ⚠️ IMPORTANT: Update this path to the correct location on your computer.
-        String basePath = "/Users/janekczajnik/Desktop/projects/solver/media/Playing Cards/PNG-cards-1.3/";
+        String basePath = "placeholder"; //use your local path to the PNG card file, don't change individual file names
         String[] suits = {"clubs", "diamonds", "hearts", "spades"};
         String[] values = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
         String[] valueNames = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
