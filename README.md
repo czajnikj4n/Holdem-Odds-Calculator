@@ -16,4 +16,5 @@ Results are generated using Monte Carlo methods to estimate win probabilities an
 - `PokerSimulation.java` – Handles simulations and CLI logic
 - `Ranking.java` – Evaluates poker hands and determines winners
 - `Deck.java` – Manages the card deck (shuffling, drawing, exclusions)
+- PNG cards folder stores the card images used by the interface. 
 
