@@ -250,7 +250,7 @@ public class PokerGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             ImageIcon cardIcon = cardImages.get(cardName);
 
-            // ✅ FIXED: Declare the lambda with its functional interface type.
+            //Declare the lambda with its functional interface type.
             BiFunction<String, String, String> updateField =
                     (existingText, newCard) -> existingText.isEmpty() ? newCard : existingText + ", " + newCard;
 
@@ -281,7 +281,7 @@ public class PokerGUI extends JFrame {
             }
 
             // --- 3. If flop is full, try to fill the turn ---
-            if (turnField.getText().isEmpty()) { // ✅ This call is correct.
+            if (turnField.getText().isEmpty()) {
                 turnField.setText(cardName);
                 communityCardsDisplayPanel.add(new JLabel(cardIcon));
                 button.setEnabled(false);
