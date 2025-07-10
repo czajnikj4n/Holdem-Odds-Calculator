@@ -250,7 +250,7 @@ public class PokerGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             ImageIcon cardIcon = cardImages.get(cardName);
 
-            //Declare the lambda with its functional interface type.
+            // ✅ FIXED: Declare the lambda with its functional interface type.
             BiFunction<String, String, String> updateField =
                     (existingText, newCard) -> existingText.isEmpty() ? newCard : existingText + ", " + newCard;
 
@@ -281,7 +281,7 @@ public class PokerGUI extends JFrame {
             }
 
             // --- 3. If flop is full, try to fill the turn ---
-            if (turnField.getText().isEmpty()) {
+            if (turnField.getText().isEmpty()) { // ✅ This call is correct.
                 turnField.setText(cardName);
                 communityCardsDisplayPanel.add(new JLabel(cardIcon));
                 button.setEnabled(false);
@@ -292,9 +292,9 @@ public class PokerGUI extends JFrame {
     }
 
     // --- UTILITY METHODS ---
-    private void loadCardImages() {
 
-        //USE YOUR CARD LOCATION FOLDER HERE
+    private void loadCardImages() {
+        // ⚠️ IMPORTANT: Update this path to the correct location on your computer.
         String basePath = "/Users/janekczajnik/Desktop/projects/solver/media/Playing Cards/PNG-cards-1.3/";
         String[] suits = {"clubs", "diamonds", "hearts", "spades"};
         String[] values = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
@@ -309,8 +309,6 @@ public class PokerGUI extends JFrame {
         }
     }
 
-
-    //For loading card
     private ImageIcon loadImage(String path) {
         try {
             ImageIcon icon = new ImageIcon(path);

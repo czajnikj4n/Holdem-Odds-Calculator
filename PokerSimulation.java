@@ -5,12 +5,6 @@ import java.util.*;
 public class PokerSimulation {
     public static ArrayList<String> usedCards = new ArrayList<>();
 
-
-    /**
-     * The main method within this class is mostly used for debugs & pre-gui checks. For full experience run
-     * Poker GUI main.
-     */
-
     public static void main(String[] args) {
         usedCards.clear();
         Scanner scanner = new Scanner(System.in);
@@ -18,13 +12,15 @@ public class PokerSimulation {
         // Ask for number of players
         System.out.println("Enter number of players:");
         int numPlayers = scanner.nextInt();
-        scanner.nextLine();
-
+        scanner.nextLine(); // consume leftover newline
 
         List<String> allPlayerCards = new ArrayList<>();
+        // ✅ NEW: Track used cards
+
         for (int i = 0; i < numPlayers; i++) {
             System.out.println("Enter hole cards for Player " + (i + 1) + " (or press Enter to randomize):");
             String input = scanner.nextLine();
+
             usedCards.add(input.trim());
 
             if (!input.isEmpty()) {
@@ -49,10 +45,6 @@ public class PokerSimulation {
 
     }
 
-    /**
-     This Method handles the main Simulation mechanism, it takes pre-set cards as inputs,
-     alongside the number of simulations. The default GUI setting is n = 10000 which is enough for convergence.
-     */
 
     public static String runSimulations(List<String> playerCardInputs, String flopInput, String turnInput, int n) {
         PokerSimulation.usedCards.clear();
@@ -71,7 +63,9 @@ public class PokerSimulation {
                 String input = playerCardInputs.get(p);
                 ArrayList<String> hand = new ArrayList<>();
 
-
+                if (!input.isEmpty()) {
+                    hand = ranking.handPlayer(input);
+                }
 
                 while (hand.size() < 2) {
                     hand.add(ranking.deck.draw());
@@ -92,6 +86,8 @@ public class PokerSimulation {
                 }
             }
 
+
+
             if (!turnInput.isEmpty()) {
                 communityCards.add(turnInput);
                 String[] parts = turnInput.split(" ");
@@ -109,6 +105,8 @@ public class PokerSimulation {
 
             communityCards = ranking.communityCards;
             ranking.setCommunityCards(communityCards);
+
+
 
 
             // Evaluate all players
@@ -140,11 +138,10 @@ public class PokerSimulation {
             }
 
             //For detailed debug
-            boolean enableDebugOutput = true; //False for no soutout's
-
+            boolean enableDebugOutput = true;
             if (enableDebugOutput) {
-                System.out.println("🧪 DEBUG ROUND " + (i + 1));
                 System.out.println("Community Cards this round: " + communityCards);
+                System.out.println("🧪 DEBUG ROUND " + (i + 1));
                 System.out.printf("%-35s | %-7s | %-16s | %-60s%n", "Hole Cards", "Score", "Hand Type", "Best 5-Card Hand");
                 System.out.println("---------------------------------------------------------------------------------------------------------------");
 
@@ -217,9 +214,14 @@ public class PokerSimulation {
                 resultText.append((idx + 1)).append(" ");
             }
         }
+
+
+
+
+
         return resultText.toString();
     }
 
+
+
 }
-
-
