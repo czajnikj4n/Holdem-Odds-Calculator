@@ -12,10 +12,10 @@ public class Ranking {
 
 
     public Ranking() {
-        this.deck = new Deck(); // ✅ Create a NEW deck object every time
-        this.deck.removeCards(); // ✅ Ensure any leftover cards are cleared (Extra safety)
-        this.deck.initialize(); // ✅ Completely reinitialize the deck with all 52 cards
-        this.deck.shuffle(); // ✅ Shuffle so the order is randomized
+        this.deck = new Deck(); //Create a new deck object every time
+        this.deck.removeCards(); //Ensure any leftover cards are cleared (Extra safety)
+        this.deck.initialize(); //Completely reinitialize the deck with all 52 cards
+        this.deck.shuffle(); //Shuffle so the order is randomized
 
         this.usedCards = new HashSet<>();
     }
@@ -90,7 +90,7 @@ public class Ranking {
 
 
     private String getSuit(String card) {
-        return card.split(" ")[2].toLowerCase(); // ✅ Normalize suits to lowercase
+        return card.split(" ")[2].toLowerCase(); //Normalize suits to lowercase
     }
 
 
@@ -211,7 +211,7 @@ public class Ranking {
 
         Map<Integer, Integer> rankCount = countRanks(hand);
 
-        int score = 0; // ✅ Ensure score is not accumulating across evaluations
+        int score = 0; //Ensure score is not accumulating across evaluations
 
         if (isFlush && isStraight && cardValue(hand.get(0)) == 14) {
             score = 100000; // Royal Flush
@@ -222,7 +222,7 @@ public class Ranking {
         } else if (hasFullHouse(rankCount)) {
             score = 70000 + getHighestOfAKind(rankCount, 3) * 10 + getHighestOfAKind(rankCount, 2);
         } else if (isFlush) {
-            if (score < 60000) {  // ✅ Prevent adding flush score multiple times
+            if (score < 60000) {  //Prevent adding flush score multiple times
                 score = 60000 + 100 * cardValue(hand.get(0)) + 50 * cardValue(hand.get(1)) + 20 * cardValue(hand.get(2)) + 10 * cardValue(hand.get(3)) + 5 * cardValue(hand.get(4));
             }
         } else if (isStraight) {
@@ -249,10 +249,10 @@ public class Ranking {
             score = 20000 + highestPair * 100 + kickerScore;
         }
         else {
-            score = 10000 + cardValue(hand.get(0)); // ✅ FIXED: Only use the highest card, not `getHighCardStrength`
+            score = 10000 + cardValue(hand.get(0)); 
         }
 
-        return score; // ✅ Ensures only ONE score is assigned, no accumulation!
+        return score;
     }
 
 
