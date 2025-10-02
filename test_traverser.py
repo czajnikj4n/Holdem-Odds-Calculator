@@ -11,5 +11,5 @@ if __name__ == "__main__":
     print("Total unique action paths:", traverser.count_paths())
 
     # (Optional) Show a few sample paths to verify structure
-    for i, path in enumerate(traverser.paths[:200], start=1):
+    for i, path in enumerate(traverser.paths[:40], start=1):
         print(f"Path {i}:", " → ".join(path))

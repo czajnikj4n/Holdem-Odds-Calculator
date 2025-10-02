@@ -1,43 +1,40 @@
 # actions.py
 
-ACTIONS = {
-    "preflop": {
-        "SB": {
-            "start": ["fold", "call_0.5bb", "raise_1.5bb", "raise_3.5bb", "allin"]
-        },
-        "BB": {
-            "facing_call": ["check", "raise_1bb", "raise_3bb", "allin"],
-            "facing_raise": ["fold", "call", "raise_2x", "raise_4x", "allin"],
-            "start": ["check"]  # needed if you want to handle cases where BB checks after SB folds (edge case)
-        },
+# -----------------------------
+# PRE-FLOP ACTIONS (Heads-up)
+# -----------------------------
+# SB acts first preflop, BB acts second
+PRE_FLOP_ACTIONS = {
+    "SB": {
+        "start": ["fold", "call 0.5", "raise 1.5", "raise 3.5", "all-in"],
+        "after_opponent": ["call 0.5", "raise 1.5", "raise 3.5", "all-in", "fold"],
     },
+    "BB": {
+        "start": ["check", "raise 1", "raise 3", "all-in", "fold"],
+        "after_opponent": ["call", "raise 2x", "raise 4x", "all-in", "fold"],
+    }
+}
 
-    # POSTFLOP STAGES
-    "flop": {
-        "first": {
-            "start": ["check", "bet_1bb", "bet_3bb", "allin"],
-        },
-        "second": {
-            "facing_check": ["check", "bet_1bb", "bet_3bb", "allin"],
-            "facing_bet": ["fold", "call", "raise_2x", "raise_4x", "allin"],
-        },
+# -----------------------------
+# POST-FLOP ACTIONS (Flop/Turn/River)
+# -----------------------------
+POST_FLOP_ACTIONS = {
+    "SB": {
+        "start": ["check", "bet 0.25", "bet 0.5", "bet 1", "all-in", "fold"],
+        "after_opponent": ["call", "raise 0.25", "raise 0.5", "raise 1", "all-in", "fold"],
     },
-    "turn": {
-        "first": {
-            "start": ["check", "bet_1bb", "bet_3bb", "allin"],
-        },
-        "second": {
-            "facing_check": ["check", "bet_1bb", "bet_3bb", "allin"],
-            "facing_bet": ["fold", "call", "raise_2x", "raise_4x", "allin"],
-        },
-    },
-    "river": {
-        "first": {
-            "start": ["check", "bet_1bb", "bet_3bb", "allin"],
-        },
-        "second": {
-            "facing_check": ["check", "bet_1bb", "bet_3bb", "allin"],
-            "facing_bet": ["fold", "call", "raise_2x", "raise_4x", "allin"],
-        },
-    },
+    "BB": {
+        "start": ["check", "bet 0.25", "bet 0.5", "bet 1", "all-in", "fold"],
+        "after_opponent": ["call", "raise 0.25", "raise 0.5", "raise 1", "all-in", "fold"],
+    }
+}
+
+# -----------------------------
+# MERGED ACTIONS FOR EASY ACCESS
+# -----------------------------
+ACTIONS = {
+    "preflop": PRE_FLOP_ACTIONS,
+    "flop": POST_FLOP_ACTIONS,
+    "turn": POST_FLOP_ACTIONS,
+    "river": POST_FLOP_ACTIONS
 }
