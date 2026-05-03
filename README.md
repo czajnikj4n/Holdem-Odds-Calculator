@@ -18,3 +18,7 @@ Results are generated using Monte Carlo methods to estimate win probabilities an
 - `Deck.java` – Manages the card deck (shuffling, drawing, exclusions)
 - PNG cards folder stores the card images used by the interface. 
 
+
+## Current State 
+- The python files are a work in progress, only Java Classes relevant for Monte Carlo
+- Python updates will handle CFR minimization and approximiating pseudo-Nash equilibriums at each given gamestate
